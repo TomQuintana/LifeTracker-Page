@@ -5,6 +5,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Image from 'next/image';
 import { useState } from "react";
 import axios from "axios";
+import { auth } from "@/utils/auth/auth";
 
 type LoginFormData = {
   email: string;
@@ -21,8 +22,9 @@ export const Login = () => {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate a delay
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}login`, data);
-      console.log('Success:', response.data);
+      //const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, data);
+      //console.log('Success:', response.data);
+      //const response = await auth(data);
 
     } catch (error: any) {
       if (error.response && error.response.status === 400) {

@@ -24,7 +24,7 @@ export default function SideBar() {
       </div>
       <ScrollArea className="flex-1">
         <nav className="p-4 space-y-2">
-          <Link href="/dashboard/books" passHref>
+          <Link href="/lifetracker/books" passHref>
             <Button variant="ghost" className="w-full justify-start">
               <BookIcon className="mr-2 h-4 w-4" />
               Books
@@ -33,34 +33,35 @@ export default function SideBar() {
 
           <Collapsible>
             <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-              >
+              <Button variant="ghost" className="w-full justify-start">
                 <DollarSignIcon className="mr-2 h-4 w-4" />
                 Expenses
               </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="pl-6 space-y-2">
-              <Button variant="ghost" className="w-full justify-start">
-                <ListIcon className="mr-2 h-4 w-4" />
-                List Expenses
-              </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <PieChartIcon className="mr-2 h-4 w-4" />
-                Expenses by Month
-              </Button>
+              <Link href="/lifetracker/expenses/list" passHref>
+                <Button variant="ghost" className="w-full justify-start">
+                  <ListIcon className="mr-2 h-4 w-4" />
+                  List
+                </Button>
+              </Link>
+              <Link href="/lifetracker/expenses/totalByType" passHref>
+                <Button variant="ghost" className="w-full justify-start">
+                  <PieChartIcon className="mr-2 h-4 w-4" />
+                  Total by type
+                </Button>
+              </Link>
             </CollapsibleContent>
           </Collapsible>
 
-          <Link href="/dashboard/tracker" passHref>
+          <Link href="/lifetracker/tracker" passHref>
             <Button variant="ghost" className="w-full justify-start">
               <NotebookText className="mr-2 h-4 w-4" />
               Track Habits
             </Button>
           </Link>
 
-          <Link href="/dashboard/user" passHref>
+          <Link href="/lifetracker/user" passHref>
             <Button variant="ghost" className="w-full justify-start">
               <UserCog className="mr-2 h-4 w-4" />
               <User />

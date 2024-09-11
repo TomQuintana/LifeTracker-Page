@@ -11,7 +11,7 @@ export default function RootLayout({
   const path = usePathname();
 
   return (
-    <div className="flex flex-col h-max">
+    <div className="flex flex-col h-screen w-full">
       <main className="flex-1 p-5 overflow-y-auto">
       <div className="flex justify-between">
         <SideBar />

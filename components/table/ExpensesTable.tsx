@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link, SquareX } from "lucide-react";
 
 import Button from "@mui/material/Button";
+import { getExpenses } from "@/services/expenses";
 
 interface Expense {
   name: string;
@@ -19,7 +20,13 @@ interface ExpenseTableProps {
   expenses: Expense[];
 }
 
-const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses }) => {
+const ExpenseTable: React.FC<ExpenseTableProps> = () => {
+
+  const [expenses, setExpenses] = useState([]);
+  const expensesTest = getExpenses();
+  console.log(expensesTest);
+
+
   const handleDelete = (index: number) => {
     console.log("Delete", index);
   };
@@ -27,6 +34,18 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses }) => {
   const handleAddExpense = () => {
     console.log("Add new expense");
   };
+
+ 
+   useEffect(() => {
+    const fetchExpenses = async () => {
+      const data = await getExpenses();
+      console.log(data);
+      
+      setExpenses(data);
+    };
+
+    fetchExpenses();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto p-4 rounded-">
@@ -51,12 +70,13 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses }) => {
                 Coutes
               </th>
               <th scope="col" className="px-6 py-3">
-                Month
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Date
               </th>
-            </tr>
+                {/*<th scope="col" className="px-6 py-3">
+               Delete 
+              </th>
+*/}
+              </tr>
           </thead>
           <tbody>
             {expenses.map((expense, index) => (
@@ -75,7 +95,6 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses }) => {
                 <td className="px-6 py-4">{expense.price_USDT.toFixed(2)}</td>
                 <td className="px-6 py-4">{expense.type}</td>
                 <td className="px-6 py-4">{expense.coutes}</td>
-                <td className="px-6 py-4">{expense.month}</td>
                 <td className="px-6 py-4">{expense.date}</td>
                 <td>
                   <button onClick={() => handleDelete(index)}>

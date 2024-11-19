@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import axios from "axios";
 
 export const auth = async (data: any) => {
+  console.log('Desde auth')
   try {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, data);
     console.log(response.data);

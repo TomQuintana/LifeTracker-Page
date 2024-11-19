@@ -1,5 +1,3 @@
-// BarChart.js
-
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
@@ -12,7 +10,6 @@ import {
   LinearScale,
 } from "chart.js";
 
-// Register the components needed for the chart, including the datalabels plugin
 ChartJS.register(
   Title,
   Tooltip,
@@ -22,35 +19,19 @@ ChartJS.register(
   LinearScale,
 );
 
-const mockGetExpenses = async () => {
-  return [
-    { type: "Food", price_ARS: 1200 },
-    { type: "Transport", price_ARS: 800 },
-    { type: "Entertainment", price_ARS: 500 },
-    { type: "Utilities", price_ARS: 1000 },
-    { type: "Health", price_ARS: 700 },
-  ];
-};
-
 const BarChart = ({ habitsData }) => {
-  const [expenses, setExpenses] = useState([]);
+  const [habits, setHabits] = useState([]);
 
-  useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        // Utiliza la función mock en lugar de la llamada real a la API
-        const response = await mockGetExpenses();
-        setExpenses(response);
-      } catch (error) {
-        console.error("Error fetching expenses:", error);
-      }
-    };
+  const totalPerHabit = habitsData.reduce((acc, habit) => {
+    if (!acc[habit.type]) {
+      acc[habit.type] = 0;
+    }
+    acc[habit.type] += habit.quantity;
+    return acc;
+  }, {});
 
-    fetchExpenses();
-  }, []);
-
-  const labels = expenses.map((habit) => habit.type);
-  const dataValues = habitsData.map((habit) => habit.quantity);
+  const labels = Object.keys(totalPerHabit);
+  const dataValues = totalPerHabit;
 
   const data = {
     labels: labels,
@@ -76,11 +57,13 @@ const BarChart = ({ habitsData }) => {
           "rgba(255, 159, 64, 1)",
         ],
         borderWidth: 1,
+        barThickness: 30,
+        // categoryPercentage: 0.1,
+        // barPercentage: 0.7,
       },
     ],
   };
 
-  // Options for the bar chart
   const options = {
     responsive: true,
     plugins: {
@@ -89,6 +72,26 @@ const BarChart = ({ habitsData }) => {
       },
       tooltip: {
         enabled: true,
+        callbacks: {
+          label: (tooltipItem: any) => {
+            return `${tooltipItem.raw} hrs`; // Muestra las horas en el tooltip
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          callback: function (value) {
+            return value + " hrs"; // Agrega "hrs" a las etiquetas del eje Y
+          },
+        },
+        beginAtZero: true, // Inicia el eje Y en 0
+        max: 30, // Establece el valor máximo del eje Y en 30
+        title: {
+          display: true,
+          text: "Hours", // Etiqueta para el eje Y
+        },
       },
     },
   };

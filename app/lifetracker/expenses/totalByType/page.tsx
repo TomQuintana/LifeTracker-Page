@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PieChart from "@/components/ui/charts/PieChart";
+import { getExpensesByType } from "@/services/expenses";
 
 const totalByType = () => {
+
+
   return (
     <div className="font-mono justify-center text-center">
       <div>

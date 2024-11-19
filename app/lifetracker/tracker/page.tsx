@@ -5,11 +5,13 @@ import BarChart from "@/components/ui/charts/BarChart";
 
 const Tracker = () => {
   const habitsData = [
-    { type: "Lecture", quantity: 12 },
-    { type: "Meditation", quantity: 80 },
-    { type: "Exercises", quantity: 50 },
-    { type: "Projects", quantity: 10 },
-    { type: "Study", quantity: 7 },
+    { type: "Lecture", quantity: 4 },
+    { type: "Lecture", quantity: 1 },
+    { type: "Meditation", quantity: 0.5 },
+    { type: "Exercises", quantity: 5 },
+    { type: "Projects", quantity: 3 },
+    { type: "Study", quantity: 6 },
+    { type: "Phone", quantity: 7 },
   ];
 
   return (

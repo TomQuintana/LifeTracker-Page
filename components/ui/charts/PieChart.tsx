@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { getExpensesByType } from '@/services/expenses';
 
 // Registrar los elementos necesarios
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -18,12 +19,19 @@ const mockGetExpenses = async () => {
 
 const PieChart = () => {
   const [expenses, setExpenses] = useState([]);
+  const [expenseByType, setExpensesByType] = useState([]);
+  const [totalByType, setTotalByType] = useState([]);
 
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
         // Utiliza la función mock en lugar de la llamada real a la API
         const response = await mockGetExpenses();
+        const data = await getExpensesByType();
+        console.log(data);
+        
+        setExpensesByType(data.expenses);
+        setTotalByType(data.total);
         setExpenses(response);
       } catch (error) {
         console.error('Error fetching expenses:', error);
@@ -32,6 +40,7 @@ const PieChart = () => {
 
     fetchExpenses();
   }, []);
+  
 
   // Crear las etiquetas y los valores para el gráfico a partir de los datos de gastos
   const labels = expenses.map(expense => expense.type);

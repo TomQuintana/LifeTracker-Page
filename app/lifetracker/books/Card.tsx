@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Card = ({ title, author, image, type, status, description }) => {
+const Card = ({ title, author, image, type, status, description, cover }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la visibilidad del modal
 
   // Función para abrir el modal
@@ -16,7 +16,7 @@ const Card = ({ title, author, image, type, status, description }) => {
   return (
     <div className="w-72 bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex justify-center">
-        <img src={image} alt={title} className="w-60 h-48 object-cover" />
+        <img src={cover} alt={title} className="w-60 h-48 object-cover" />
       </div>
       <div className="p-4">
         <h2 className="text-xl font-semibold">{title}</h2>

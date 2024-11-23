@@ -2,8 +2,15 @@
 
 import React from "react";
 import BarChart from "@/components/ui/charts/BarChart";
+import { useSession } from 'next-auth/react';
+import { getToken } from 'next-auth/jwt';
 
 const Tracker = () => {
+
+  const {data: session} = useSession();
+  console.log(session);
+  
+
   const habitsData = [
     { type: "Lecture", quantity: 4 },
     { type: "Lecture", quantity: 1 },

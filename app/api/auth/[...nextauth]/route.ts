@@ -1,51 +1,80 @@
-// /app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
 
-import axios from 'axios';
-import { NextResponse } from 'next/server';
+import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
 
-// Exporta un handler para el método POST (login)
-export async function POST(req: Request) {
-  console.log(req.body)
-  const { email, password } = await req.json();
-  try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-      email,
-      password
-    });
-    console.log(response.data);
+// const handler = NextAuth({
+//   providers: [
+//     GitHubProvider({
+//       clientId: process.env.GITHUB_ID as string,
+//       clientSecret: process.env.GITHUB_SECRET as string,
+//       state: false
+//     })
+//   ]
+// })
+//
+// export {handler as GET, handler as POST}
+//
 
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: 'Custom Provider',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials) {
+        try {
+          const response = await axios.post('http://localhost:3001/api/user/login', {
+            email: credentials?.email,
+            password: credentials?.password,
+          });
 
-    if (response.status === 200) {
-      localStorage.setItem('token', response.data.token);
-    }
+          if (response.data.token) {
+            // Si las credenciales son correctas, devolver el usuario
+            return { 
+              token: response.data.token,
+              id: '1111',
+              name: 'tom',
+              email: 'tom@tom.com',
+            };
+          } else {
+            // Si las credenciales no son válidas, retornar null
+            return null;
+          }
+        } catch (error) {
+          console.error('Error en la autenticación:', error);
+          return null;
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      console.log('token', token);
+      console.log('user', user);
+      
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.token = user.token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = token;
+      console.log('sessin',session.user);
+      
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/login', // Redirige siempre a /login en lugar de la página predeterminada de NextAuth
+  },
+});
 
-
-    return NextResponse.json({ message: 'Autenticación exitosa' });
-  } catch (error) {
-    return NextResponse.json({ error: 'Error en la autenticación' }, { status: 400 });
-  }
-}
-
-// Exporta un handler para el método GET (sesión)
-export async function GET(req: Request) {
-  try {
-    // Aquí va tu lógica para obtener la sesión
-    const session = getSessionFromCookies(req); // ejemplo de función para obtener la sesión
-
-    if (!session) {
-      return NextResponse.json({ message: 'No hay sesión activa' }, { status: 404 });
-    }
-
-    return NextResponse.json({ session });
-  } catch (error) {
-    return NextResponse.json({ error: 'Error al obtener la sesión' }, { status: 500 });
-  }
-}
-
-// Lógica para obtener sesión desde las cookies
-function getSessionFromCookies(req: Request) {
-  const cookies = req.headers.get('cookie');
-  // Lógica para leer la cookie de sesión y devolver la sesión
-  return null; // ejemplo: si no hay sesión activa
-}
-
+export { handler as GET, handler as POST };

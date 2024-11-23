@@ -1,4 +1,9 @@
+
+import { useSession } from "next-auth/react";
 import ExpenseTable from "@/components/table/ExpensesTable";
+
+
+
 
 const page = () => {
   interface Expense {

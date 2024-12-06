@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const getBooks = async () => {
+export const getBooks = async (token:string) => {
   try {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbF91c2VyIjoidG9tcXVpbnRhbmEyMEBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiMjlkZWRlMDQtMjNjNi00NWViLWI2NjYtMmRhZGExNWQ5ZGQwIiwiZXhwIjoxNzMxOTk0ODk4fQ.OXOf50dITazVGjnHGvYImfwqUzeWN0YbCfiL6_GG-9o'
+    /* const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbF91c2VyIjoidG9tcXVpbnRhbmEyMEBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiMjlkZWRlMDQtMjNjNi00NWViLWI2NjYtMmRhZGExNWQ5ZGQwIiwiZXhwIjoxNzMxOTk0ODk4fQ.OXOf50dITazVGjnHGvYImfwqUzeWN0YbCfiL6_GG-9o' */
     const response = await axios.get(`http://localhost:3001/api/books`, {
       headers: {
         'Authorization': `Bearer ${token}`,

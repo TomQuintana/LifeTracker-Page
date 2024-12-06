@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbF91c2VyIjoidG9tcXVpbnRhbmEyMEBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiMjlkZWRlMDQtMjNjNi00NWViLWI2NjYtMmRhZGExNWQ5ZGQwIiwiZXhwIjoxNzMxOTk1OTU0fQ.PGW2HXy3jb7I_c5hG4Vs9CVp7YTARWa2pUIkX-C9dqY'
-
-export const getExpenses = async () => {
+export const getExpenses = async (token: string) => {
   try {
     
     const response = await axios.get(`http://localhost:3001/api/expense`, {
@@ -10,9 +8,32 @@ export const getExpenses = async () => {
         'Authorization': `Bearer ${token}`,
       },
       params: {
-        month: 11
+        month: 12,
+        cursor: 0
       }
     });
+    console.log(response.data);
+    return response.data;
+  }
+  catch (error: any) {
+    console.log(error);
+
+  }
+}
+
+export const getExpensesByType = async (token: string) => {
+  try {
+    
+    const response = await axios.get(`http://localhost:3001/api/expense/total`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      params: {
+        month: 12
+      }
+    });
+    console.log(response.data);
+    
 
     return response.data;
   }
@@ -22,24 +43,47 @@ export const getExpenses = async () => {
   }
 }
 
-export const getExpensesByType = async () => {
+export const addExpenses = async (token: string, expense: any) => {
+  console.log(expense);
+const expenseTest = {
+  name: "Cena en Aleee",
+  price_ARS: 13000,
+  products: [
+    {
+      name: "test",
+      price_ARS: 10000,
+      quantity: 2,
+    },
+  ],
+  type: "other",
+  month: 10,
+  date: "05-10-2024",
+};
+  
   try {
+    const response = await axios.post(`http://localhost:3001/api/expense`, expenseTest, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log(response.data);
     
-    const response = await axios.get(`http://localhost:3001/api/expense/total`, {
+  } catch (error) {
+    console.log(error.response.data);
+    
+  }
+}
+
+export const deleteExpense = async (token: string, id: string) => {
+  try {
+    const response = await axios.delete(`http://localhost:3001/api/expense/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      params: {
-        month: 11
-      }
     });
-
     console.log(response.data);
-    
-    return response.data;
-  }
-  catch (error: any) {
-    console.log(error);
-
+  } catch (error) {
+    console.log(error.response.data);
   }
 }
